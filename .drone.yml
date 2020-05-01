@@ -1,0 +1,92 @@
+kind: pipeline
+name: default
+
+steps:
+  # - name: citest
+  #   image: node:lts-alpine
+  #   pull: if-not-exists
+  #   commands:
+  #     - export SUBDOMAIN="QWE."
+  #     - export DOMAIN=$${SUBDOMAIN}asd
+  #     - echo $DOMAIN
+
+  - name: config
+    image: node:lts-alpine
+    pull: if-not-exists
+    environment:
+      CI_DOMAIN:
+        from_secret: CI_DOMAIN
+      NPM_AUTH_TOKEN:
+        from_secret: NPM_AUTH_TOKEN
+    commands:
+      - echo "//$CI_DOMAIN/repository/npm/:_authToken=$NPM_AUTH_TOKEN" > .npmrc
+      - echo "//$CI_DOMAIN/repository/npm-publish/:_authToken=$NPM_AUTH_TOKEN" >> .npmrc
+      - echo "registry=https://$CI_DOMAIN/repository/npm" >> .npmrc
+      - echo "always-auth=true" >> .npmrc
+
+  - name: build
+    image: node:lts-alpine
+    pull: if-not-exists
+    commands:
+      - yarn
+#      - yarn list --depth=0
+      - yarn build
+      - yarn --silent ci:tags $DRONE_BRANCH > .tags
+      - yarn --silent ci:subnamespace $DRONE_BRANCH > .subnamespace
+      - yarn --silent ci:subdomain $DRONE_BRANCH > .subdomain
+
+  - name: publish
+    image: plugins/docker:18.09
+    pull: if-not-exists
+    settings:
+      repo: docker-registry.enterprise-ui.com/enterpriseui/cra-ts-styled-boilerplate
+      username:
+        from_secret: DOCKER_AUTH_USER
+      password:
+        from_secret: DOCKER_AUTH_PASS
+      registry: docker-registry.enterprise-ui.com
+      # tag: from .tags file, $DRONE_BRANCH-version, 0.1.1-develop
+    when:
+      branch:
+      - master
+      - develop
+      event: push
+
+  - name: deploy
+    image: dtzar/helm-kubectl:3.2.0
+    pull: if-not-exists
+    environment:
+      KUBE_CFG:
+        from_secret: KUBE_CFG
+      ROOT_DOMAIN:
+        from_secret: ROOT_DOMAIN
+    commands:
+      # $KUBE_CFG=base64 ~/.kube/custom-contexts/your_cluster/config.yml
+      - echo $KUBE_CFG | base64 -d > kubeconfig.yaml
+      - export KUBECONFIG=$(pwd)/kubeconfig.yaml
+      - export REGISTRY_DOMAIN=docker-registry.$ROOT_DOMAIN
+      # -develop
+      - export SUBNAMESPACE=$(cat .subnamespace)
+      - echo cra-ts-styled-boilerplate$SUBNAMESPACE
+      # develop.
+      - export SUBDOMAIN=$(cat .subdomain)
+      - export DOMAIN=$${SUBDOMAIN}cra-ts-styled-boilerplate.$ROOT_DOMAIN
+      - echo $DOMAIN
+      - |
+        helm upgrade --install cra-ts-styled-boilerplate .chart \
+        --namespace cra-ts-styled-boilerplate$SUBNAMESPACE \
+        --set image.tag=$(cat .tags) \
+        --set image.repository=$REGISTRY_DOMAIN/enterpriseui/cra-ts-styled-boilerplate \
+        --set imagePullSecrets[0].name="docker-registry-secret" \
+        --set ingress.enabled=true \
+        --set ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
+        --set ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-body-size"=100m \
+        --set ingress.annotations."cert-manager\.io\/cluster-issuer"="letsencrypt-prod" \
+        --set ingress.hosts[0]=$DOMAIN \
+        --set ingress.tls[0].hosts[0]=$DOMAIN \
+        --set ingress.tls[0].secretName=$DOMAIN-tls
+    when:
+      branch:
+      - master
+      - develop
+      event: push
