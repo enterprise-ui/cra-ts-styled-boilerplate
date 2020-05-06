@@ -1,0 +1,5 @@
+{
+  "welcome_message": "Bearbeite <1>src/pages/Homepage.js</1> und speichere zum erneuten Laden.",
+  "learn_react": "Lerne React!",
+  "error": { "404": "Diese Seite konnte nicht gefunden werden." }
+}

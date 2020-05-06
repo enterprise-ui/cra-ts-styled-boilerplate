@@ -1,0 +1,59 @@
+{
+  "name": "cra-ts-styled-boilerplate-storybook",
+  "version": "0.1.4",
+  "private": true,
+  "scripts": {
+    "build": "build-storybook -s public",
+    "start": "start-storybook -p 9009 -s public"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "@types/jest": "25.2.1",
+    "@types/node": "13.13.4",
+    "@types/react": "16.9.34",
+    "@types/react-dom": "16.9.7",
+    "babel-loader": "^8.0.6",
+    "prop-types": "^15.7.2",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-scripts": "3.4.1",
+    "typescript": "3.8.3"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "6.0.0-beta.2",
+    "@storybook/addon-actions": "6.0.0-beta.2",
+    "@storybook/addon-docs": "6.0.0-beta.2",
+    "@storybook/addon-knobs": "6.0.0-beta.2",
+    "@storybook/addon-links": "6.0.0-beta.2",
+    "@storybook/addons": "6.0.0-beta.2",
+    "@storybook/preset-create-react-app": "^2.1.1",
+    "@storybook/react": "6.0.0-beta.2",
+    "@types/enzyme": "^3.9.0",
+    "cra-ts-styled-boilerplate-uikit": "0.1.1",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.9.1",
+    "enzyme-to-json": "^3.4.1",
+    "fork-ts-checker-webpack-plugin": "^4.0.3",
+    "react-docgen-typescript-loader": "^3.7.2",
+    "react-moment-proptypes": "^1.7.0",
+    "ts-node": "~8.9.1",
+    "tslint": "^6.1.2",
+    "tslint-config-airbnb": "^5.11.1"
+  },
+  "storybook": {
+    "chromatic": {
+      "projectToken": "19whyj1tlac"
+    }
+  }
+}
