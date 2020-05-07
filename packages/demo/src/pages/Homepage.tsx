@@ -9,8 +9,6 @@ import { ReactComponent as Logo } from '../assets/logo.svg';
 import { Layout } from '../layout/Layout';
 import { accentColor } from '../styles/theme';
 
-
-
 const rotate = keyframes`
   from {
     transform: rotate(0deg);
@@ -58,12 +56,13 @@ const Homepage = () => {
         <Trans i18nKey="welcome_message">
           Edit <code>src/pages/Homepage.js</code> and save to reload1.
         </Trans>
- <Welcome/>
-
+        <Welcome />
       </p>
       <Button href="https://reactjs.org">{t('learn_react')}</Button>
     </Layout>
   );
 };
+
+Homepage.displayName = 'Demo.Homepage';
 
 export default withController(Homepage);

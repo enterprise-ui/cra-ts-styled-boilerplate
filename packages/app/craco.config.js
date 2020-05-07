@@ -31,7 +31,7 @@ module.exports = {
 
       // ../uikit/src works
       .concat([
-        'core', 'uikit',
+        'core', 'demo', 'uikit',
       ].map(p => path.resolve(__dirname, '..', p, 'src')))
 
       console.log('include', include)

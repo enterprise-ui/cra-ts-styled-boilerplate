@@ -16,4 +16,6 @@ const NoMatchPage = () => {
   );
 };
 
+NoMatchPage.displayName = 'Demo.NoMatchPage';
+
 export default withController(NoMatchPage);

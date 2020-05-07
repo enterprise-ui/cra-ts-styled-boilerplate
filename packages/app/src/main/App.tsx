@@ -1,16 +1,14 @@
 import React from 'react';
 
+import {HomePage} from 'cra-ts-styled-boilerplate-demo';
+import {NoMatchPage} from 'cra-ts-styled-boilerplate-demo';
 import { Route, Switch } from 'react-router-dom';
-
-import Homepage from '../pages/Homepage';
-import NoMatchPage from '../pages/NoMatchPage';
 
 export const App = () => {
   return (
     <Switch>
-      <Route exact path="/" component={Homepage} />
+      <Route exact path="/" component={HomePage} />
       <Route path="*" component={NoMatchPage} />
     </Switch>
   );
 };
-
