@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { withController } from 'cra-ts-styled-boilerplate-core';
 import { useTranslation } from 'react-i18next';
 
 import { Layout } from '../layout/Layout';
@@ -15,4 +16,4 @@ const NoMatchPage = () => {
   );
 };
 
-export default NoMatchPage;
+export default withController(NoMatchPage);
