@@ -1,4 +1,3 @@
-import HomePage from './pages/Homepage';
-import NoMatchPage from './pages/NoMatchPage';
+import { CONFIG_ROUTES, ROUTES } from './routes';
 
-export {HomePage, NoMatchPage};
+export { ROUTES, CONFIG_ROUTES };
