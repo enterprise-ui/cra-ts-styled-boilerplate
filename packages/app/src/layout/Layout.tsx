@@ -32,4 +32,3 @@ Layout.defaultProps = {
   row: false,
   reverse: false,
 };
-

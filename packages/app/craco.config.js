@@ -2,7 +2,6 @@ const path = require('path');
 
 const { ESLINT_MODES, whenTest } = require('@craco/craco');
 
-
 module.exports = {
   eslint: {
     mode: ESLINT_MODES.file,

@@ -1,3 +1,5 @@
-import { CONFIG_ROUTES, ROUTES } from './routes';
+import { reducers as DemoReducer } from './reducers';
+import { rootSaga as DemoSagas } from './rootSaga';
+import { CONFIG_ROUTES, PATHS } from './routes';
 
-export { ROUTES, CONFIG_ROUTES };
+export { CONFIG_ROUTES, PATHS, DemoReducer, DemoSagas };

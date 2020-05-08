@@ -2,6 +2,7 @@ import './i18n';
 
 import React from 'react';
 
+import { configureStore } from 'cra-ts-styled-boilerplate-core';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -10,13 +11,13 @@ import { ThemeProvider } from 'styled-components';
 
 import { usePrefersDarkMode } from './hooks/usePrefersDarkMode';
 import { App } from './main/App';
-import configureStore from './store/configureStore';
+import rootReducer from './store/reducers/rootReducer';
 import { GlobalStyle } from './styles/global';
 import * as serviceWorker from './serviceWorker';
 
 const AppContainer = () => {
   const prefersDarkMode = usePrefersDarkMode();
-  const { store, persistor } = configureStore();
+  const { store, persistor } = configureStore(rootReducer);
 
   return (
     <React.StrictMode>
