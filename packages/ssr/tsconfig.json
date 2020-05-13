@@ -10,7 +10,7 @@
     "declaration": true,
     "declarationDir": "public/types",
     "target": "es6",
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "allowJs": true,

@@ -6,7 +6,7 @@ import storage from 'redux-persist/lib/storage';
 import createSagaMiddleware, { Saga } from 'redux-saga';
 import thunk from 'redux-thunk';
 
-import { IPersistedStore } from '../Models';
+import { IPersistedStore, IStaticProps } from '../Models';
 
 const hmrDefaultOptions = {
   persistConfig: {
@@ -16,7 +16,13 @@ const hmrDefaultOptions = {
   reducerPath: './reducers/rootReducer',
 };
 
-export default <TState = any>(rootReducer: Reducer, state?: TState, sagas?: Saga, hmrOptions = hmrDefaultOptions): IPersistedStore => {
+export default <TState = any>(
+  rootReducer: Reducer,
+  {isServer = false}: IStaticProps,
+  state?: TState,
+  sagas?: Saga,
+  hmrOptions = hmrDefaultOptions,
+): IPersistedStore => {
   const middlewares: Middleware[] = [thunk];
   let sagaMiddleware = null;
 
@@ -36,7 +42,7 @@ export default <TState = any>(rootReducer: Reducer, state?: TState, sagas?: Saga
     store.sagaTask = sagaMiddleware?.run(sagas);
   }
 
-  if (module.hot) {
+  if (!isServer && module.hot) {
     module.hot.accept(hmrOptions.reducerPath, () => {
       const nextRootReducer = rootReducer;
       store.replaceReducer(persistReducer(hmrOptions.persistConfig, nextRootReducer));

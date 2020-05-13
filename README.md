@@ -3,7 +3,9 @@ Create React App + Typescript + Styled-Components + StoryBook + Monorepo Boilerp
 
 ```
 $ yarn
-$ cd packages/app
+$ cd packages/pages
+& yarn build
+$ cd packages/ssr
 $ yarn build
-$ yarn serve
+$ yarn start
 ```

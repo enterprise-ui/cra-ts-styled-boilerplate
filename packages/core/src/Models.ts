@@ -7,8 +7,9 @@ import { Store } from 'redux';
 import { Persistor } from 'redux-persist';
 import { Task } from 'redux-saga';
 
-interface IStaticProps {
+export interface IStaticProps {
   isServer?: boolean;
+  isServerInitialRender?: boolean
 }
 
 interface IRouteProps {

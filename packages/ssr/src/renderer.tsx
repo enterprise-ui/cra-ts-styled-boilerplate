@@ -1,20 +1,32 @@
 import { ChunkExtractor } from '@loadable/server';
-import { IStore } from 'cra-ts-styled-boilerplate-core';
+import { IStaticProps, IStore } from 'cra-ts-styled-boilerplate-core';
 import path from 'path';
 import { renderToString } from 'react-dom/server';
 import { Helmet } from 'react-helmet';
 import serialize from 'serialize-javascript';
 
-export default (App: JSX.Element, store: IStore, staticProps?: any) => {
-  const statsFile = path.resolve('./public/loadable-stats.json');
-  const extractor = new ChunkExtractor({ statsFile });
-  const jsx = extractor.collectChunks(App);
+export default (
+  App: JSX.Element,
+  store: IStore,
+  publicPath: string,
+  staticProps?: IStaticProps,
+) => {
+  const statsFile = path.resolve(path.join(publicPath, 'loadable-stats.json'));
+  let extractor = null;
+
+  try {
+    extractor = new ChunkExtractor({ statsFile });
+  } catch (err) {
+    console.log(err);
+  }
+
+  const jsx = extractor?.collectChunks(App) || App;
 
   const content = renderToString(jsx);
 
   const helmet = Helmet.renderStatic();
 
-  const scriptTags = extractor.getScriptTags();
+  const scriptTags = extractor?.getScriptTags() || '';
 
   return `<!DOCTYPE html>
             <head>

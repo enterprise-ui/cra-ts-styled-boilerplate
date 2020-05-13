@@ -2,16 +2,18 @@
   "name": "cra-ts-styled-boilerplate-ssr",
   "version": "0.1.0",
   "main": "src/index.ts",
+  "private": true,
   "scripts": {
-    "build": "craco build"
+    "build": "webpack --mode production",
+    "start": "node build/www.js"
   },
   "dependencies": {
-    "@craco/craco": "^5.6.4",
     "@loadable/component": "^5.12.0",
     "@loadable/server": "^5.12.0",
+    "babel-polyfill": "^6.26.0",
     "compression": "^1.7.4",
     "cra-ts-styled-boilerplate-core": "0.1.0",
-    "cra-ts-styled-boilerplate-demo": "0.1.0",
+    "cra-ts-styled-boilerplate-pages": "0.1.0",
     "express": "4.17.1",
     "lodash": "4.17.15",
     "react-helmet": "5.2.1",
@@ -20,11 +22,25 @@
     "serialize-javascript": "2.1.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-transform-modules-commonjs": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "@loadable/webpack-plugin": "^5.12.0",
+    "@svgr/webpack": "4.3.3",
     "@types/compression": "^1.7.0",
     "@types/loadable__component": "5.10.0",
     "@types/loadable__server": "5.12.1",
     "@types/react-helmet": "^5.0.15",
     "@types/react-router-config": "^5.0.1",
-    "@types/serialize-javascript": "^1.5.0"
+    "@types/serialize-javascript": "^1.5.0",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-named-asset-import": "^0.3.6",
+    "babel-plugin-styled-components": "^1.10.7",
+    "copy-webpack-plugin": "^5.1.1",
+    "eslint-loader": "4.0.2",
+    "webpack-cli": "^3.3.11",
+    "webpack-node-externals": "1.7.2"
   }
 }

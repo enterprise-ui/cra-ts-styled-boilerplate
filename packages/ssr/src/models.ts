@@ -6,6 +6,7 @@ import { Saga } from 'redux-saga';
 type TRenderDocumentMethod = (path: string, store: IPersistedStore, context: StaticRouterContext) => JSX.Element;
 
 export interface ISSROptions {
+    publicPath: string;
     renderApp: TRenderDocumentMethod;
     rootReducer: Reducer;
     rootSaga?: Saga;

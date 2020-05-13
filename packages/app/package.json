@@ -25,9 +25,7 @@
     "@types/styled-components": "^5.1.0",
     "@types/styled-theming": "^2.2.2",
     "babel-plugin-styled-components": "^1.10.7",
-    "cra-ts-styled-boilerplate-core": "0.1.0",
-    "cra-ts-styled-boilerplate-demo": "0.1.0",
-    "cra-ts-styled-boilerplate-ssr": "0.1.0",
+    "cra-ts-styled-boilerplate-pages": "0.1.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-simple-import-sort": "^5.0.2",
@@ -60,12 +58,10 @@
   },
   "scripts": {
     "start": "craco start",
-    "build:spa": "craco build",
-    "build:ssr": "craco build --config craco.ssr.config.js",
+    "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "serve": "serve -s build",
-    "ssr": "node build/ssr.js"
+    "serve": "serve -s build"
   },
   "eslintConfig": {
     "extends": "react-app"
