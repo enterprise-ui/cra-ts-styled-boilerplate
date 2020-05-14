@@ -4,7 +4,7 @@
   "main": "src/index.ts",
   "private": true,
   "scripts": {
-    "build": "craco build",
+    "pages:build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },

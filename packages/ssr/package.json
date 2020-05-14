@@ -4,8 +4,8 @@
   "main": "src/index.ts",
   "private": true,
   "scripts": {
-    "build": "webpack --mode production",
-    "start": "node build/www.js"
+    "ssr:build": "webpack --mode production",
+    "ssr:start": "node build/www.js"
   },
   "dependencies": {
     "@loadable/component": "^5.12.0",

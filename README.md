@@ -2,10 +2,8 @@
 Create React App + Typescript + Styled-Components + StoryBook + Monorepo Boilerplate
 
 ```
-$ yarn
-$ cd packages/pages
-& yarn build
-$ cd packages/ssr
+$ npm i -g lerna
+$ yarn install
 $ yarn build
-$ yarn start
+& yarn start
 ```

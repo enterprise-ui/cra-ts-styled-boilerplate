@@ -12,8 +12,10 @@ import { matchRoutes } from 'react-router-config';
 import { ISSROptions } from './models';
 import renderer from './renderer';
 
+const getPublicPath = (module: string) => `../../node_modules/${module}/build`;
+
 export function bootstrap(options: ISSROptions) {
-  const { publicPath, renderApp, rootReducer, rootSaga, routes, routesConfig } = options;
+  const { packageIds, pathToPackageConfig, renderApp, rootReducer, rootSaga, routes, routesConfig } = options;
   const app = express();
 
   function shouldCompress(req: Request, res: Response) {
@@ -22,6 +24,7 @@ export function bootstrap(options: ISSROptions) {
   }
 
   function handleRequest(req: Request, res: Response, next: NextFunction) {
+    const targetModule = pathToPackageConfig[req.url];
     const persistStore = configureStore(rootReducer, {isServer: true}, {}, rootSaga);
     const { store } = persistStore;
 
@@ -48,7 +51,7 @@ export function bootstrap(options: ISSROptions) {
           .then((staticProps) => {
             const context: StaticRouterContext = {};
             const AppComponent = renderApp(req.path, persistStore, context);
-            const content = renderer(AppComponent, store, publicPath, { ...staticProps, isServerInitialRender: false });
+            const content = renderer(AppComponent, store, getPublicPath(targetModule), { ...staticProps, isServerInitialRender: true });
 
             if (context.statusCode === 404) {
               res.status(404);
@@ -74,7 +77,9 @@ export function bootstrap(options: ISSROptions) {
 
   const port = process.env.PORT || 5000;
 
-  app.use(express.static(publicPath, {index: false}));
+  packageIds.forEach((packageId) => {
+    app.use(express.static(getPublicPath(packageId), {index: false}));
+  });
 
   app.get(routes, handleRequest);
 
