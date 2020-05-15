@@ -4,6 +4,7 @@ import path from 'path';
 import { renderToString } from 'react-dom/server';
 import { Helmet } from 'react-helmet';
 import serialize from 'serialize-javascript';
+import { ServerStyleSheet } from 'styled-components';
 
 export default (
   App: JSX.Element,
@@ -20,20 +21,26 @@ export default (
     console.log(err);
   }
 
-  const jsx = extractor?.collectChunks(App) || App;
+  const sheet = new ServerStyleSheet();
 
-  const content = renderToString(jsx);
+  const Appx = extractor?.collectChunks(App) || App;
 
-  const helmet = Helmet.renderStatic();
+  try {
+    const content = renderToString(sheet.collectStyles(Appx));
 
-  const scriptTags = extractor?.getScriptTags() || '';
+    const styleTags = sheet.getStyleTags();
 
-  return `<!DOCTYPE html>
+    const helmet = Helmet.renderStatic();
+
+    const scriptTags = extractor?.getScriptTags() || '';
+
+    return `<!DOCTYPE html>
             <head>
                 ${helmet.title.toString()}
                 ${helmet.meta.toString()}
                 ${helmet.link.toString()}
                 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                ${styleTags}
             </head>
             <body>
                 <div id="root">${content}</div>
@@ -47,4 +54,9 @@ export default (
                 ${scriptTags}
             </body>
     </html>`;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    sheet.seal();
+  }
 };

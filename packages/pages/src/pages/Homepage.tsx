@@ -9,14 +9,14 @@ import styled, { keyframes } from 'styled-components';
 import { Layout } from '../layout/Layout';
 import { accentColor } from '../styles/theme';
 
-// const rotate = keyframes`
-//   from {
-//     transform: rotate(0deg);
-//   }
-//   to {
-//     transform: rotate(360deg);
-//   }
-// `;
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
 
 // const SpinningLogo = styled(Logo)`
 //   height: 40vh;
