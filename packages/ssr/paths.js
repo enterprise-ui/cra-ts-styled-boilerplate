@@ -5,6 +5,11 @@ const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 
 const moduleFileExtensions = ['js', 'ts', 'tsx', 'json', 'jsx'];
+const packageDependencies = [
+  'core',
+  'pages',
+  'uikit',
+].map((package) => resolveApp(`../${package}/src`));
 
 module.exports = {
   appBuild: resolveApp('build'),
@@ -12,7 +17,7 @@ module.exports = {
   appSrc: resolveApp('src'),
   babelrc: resolveApp('./babelrc'),
   moduleFileExtensions,
-  packageDependencies: [resolveApp('../core/src'), resolveApp('../pages/src'), resolveApp('../uikit/src')],
+  packageDependencies,
   packageNodeModules: resolveApp('./node_modules'),
   publicPath: resolveApp('../pages/build/static'),
 };

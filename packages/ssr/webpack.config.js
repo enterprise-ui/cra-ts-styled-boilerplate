@@ -1,11 +1,14 @@
 // const CopyWebpackPlugin = require('copy-webpack-plugin');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
+const packages = require('./packages');
 const paths = require('./paths');
 const baseConfig = require('./webpack.common');
 
+console.log(packages);
+
 const nodeExternalsOptions = {
-  whitelist: ['cra-ts-styled-boilerplate-core', 'cra-ts-styled-boilerplate-pages', 'cra-ts-styled-boilerplate-uikit'],
+  whitelist: packages,
 };
 
 module.exports = function (webpackEnv) {

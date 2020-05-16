@@ -7,3 +7,5 @@ $ yarn install
 $ yarn build
 & yarn start
 ```
+
+Open browser http://localhost:5000/pages

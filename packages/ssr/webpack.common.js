@@ -1,5 +1,7 @@
 const paths = require('./paths');
 
+console.log(paths.packageDependencies);
+
 module.exports = {
   resolve: {
     extensions: paths.moduleFileExtensions.map((ext) => `.${ext}`),
