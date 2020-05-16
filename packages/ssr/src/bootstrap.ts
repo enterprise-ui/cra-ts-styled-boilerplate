@@ -6,16 +6,19 @@ import {
   TRouteComponent,
 } from 'cra-ts-styled-boilerplate-core';
 import express, { NextFunction, Request, Response } from 'express';
+import i18nmiddleware from 'i18next-express-middleware';
 import { StaticRouterContext } from 'react-router';
 import { matchRoutes } from 'react-router-config';
 
+import i18nOptions from './i18n/options';
+import i18n from './i18n';
 import { ISSROptions } from './models';
 import renderer from './renderer';
 
 const getPublicPath = (module: string) => `../../node_modules/${module}/build`;
 
 export function bootstrap(options: ISSROptions) {
-  const { packageIds, pathToPackageConfig, renderApp, rootReducer, rootSaga, routes, routesConfig } = options;
+  const { renderApp, rootReducer, rootSaga, routes, routesConfig, spaPackageId } = options;
   const app = express();
 
   function shouldCompress(req: Request, res: Response) {
@@ -24,7 +27,6 @@ export function bootstrap(options: ISSROptions) {
   }
 
   function handleRequest(req: Request, res: Response, next: NextFunction) {
-    const targetModule = pathToPackageConfig[req.url];
     const persistStore = configureStore(rootReducer, {isServer: true}, {}, rootSaga);
     const { store } = persistStore;
 
@@ -50,8 +52,11 @@ export function bootstrap(options: ISSROptions) {
         Promise.all(promises)
           .then((staticProps) => {
             const context: StaticRouterContext = {};
-            const AppComponent = renderApp(req.path, persistStore, context);
-            const content = renderer(AppComponent, store, getPublicPath(targetModule), { ...staticProps, isServerInitialRender: true });
+            const AppComponent = renderApp(req.i18n, req.path, persistStore, routesConfig, context);
+            const content = renderer(AppComponent, store, getPublicPath(spaPackageId), {
+              ...staticProps,
+              isServerInitialRender: true,
+            });
 
             if (context.statusCode === 404) {
               res.status(404);
@@ -69,17 +74,21 @@ export function bootstrap(options: ISSROptions) {
   }
 
   app.use(
+    i18nmiddleware.handle(i18n, {
+      removeLngFromUrl: false,
+    }),
+  );
+
+  app.use(
     compression({
       level: 2,
       filter: shouldCompress,
     }),
   );
 
-  const port = process.env.PORT || 5000;
+  const port = process.env.PORT || 5001;
 
-  packageIds.forEach((packageId) => {
-    app.use(express.static(getPublicPath(packageId), {index: false}));
-  });
+  app.use(express.static(getPublicPath(spaPackageId), { index: false }));
 
   app.get(routes, handleRequest);
 
@@ -96,7 +105,13 @@ export function bootstrap(options: ISSROptions) {
 
   app.use(handleRequest);
 
-  app.listen(port, () => {
-    console.log(`Listening on port: ${port}`);
+  i18n.init(i18nOptions, (err) => {
+    if (err) {
+      throw new Error(err);
+    }
+
+    app.listen(port, () => {
+      console.log(`Listening on port: ${port}`);
+    });
   });
 }

@@ -9,7 +9,7 @@ const packageDependencies = [
   'core',
   'pages',
   'uikit',
-].map((package) => resolveApp(`../${package}/src`));
+].map((packageId) => resolveApp(`../${packageId}/src`));
 
 module.exports = {
   appBuild: resolveApp('build'),
@@ -19,5 +19,4 @@ module.exports = {
   moduleFileExtensions,
   packageDependencies,
   packageNodeModules: resolveApp('./node_modules'),
-  publicPath: resolveApp('../pages/build/static'),
 };

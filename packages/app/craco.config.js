@@ -1,7 +1,7 @@
 const path = require('path');
 
 const { ESLINT_MODES, whenTest } = require('@craco/craco');
-
+const LoadablePlugin = require('@loadable/webpack-plugin');
 
 module.exports = {
   eslint: {
@@ -31,14 +31,16 @@ module.exports = {
 
       // ../uikit/src works
       .concat([
-        'uikit',
-      ].map(p => path.resolve(__dirname, '..', p, 'src')))
+        'core', 'pages', 'uikit',
+      ].map(p => path.resolve(__dirname, '..', p, 'src')));
 
-      console.log('include', include)
+      console.log('include', include);
       // linter
-      webpackConfig.module.rules[1].include = include
+      webpackConfig.module.rules[1].include = include;
       // loader
-      webpackConfig.module.rules[2].oneOf[1].include = include
+      webpackConfig.module.rules[2].oneOf[1].include = include;
+
+      webpackConfig.plugins = webpackConfig.plugins.concat(new LoadablePlugin());
 
       return webpackConfig
     },

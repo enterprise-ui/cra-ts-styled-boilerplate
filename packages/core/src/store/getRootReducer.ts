@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-import { IPackageReducerConfig } from '../models';
+import { IPackageReducerConfig } from '../Models';
 
 export default (reducers: IPackageReducerConfig) =>
   combineReducers({

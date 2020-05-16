@@ -3,20 +3,21 @@ import React from 'react';
 import { withController } from 'cra-ts-styled-boilerplate-core';
 import { Welcome } from 'cra-ts-styled-boilerplate-uikit';
 import { Trans, useTranslation } from 'react-i18next';
-import styled, { keyframes } from 'styled-components';
+// import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 // import { ReactComponent as Logo } from '../assets/logo.svg';
 import { Layout } from '../layout/Layout';
 import { accentColor } from '../styles/theme';
 
-const rotate = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`;
+// const rotate = keyframes`
+//   from {
+//     transform: rotate(0deg);
+//   }
+//   to {
+//     transform: rotate(360deg);
+//   }
+// `;
 
 // const SpinningLogo = styled(Logo)`
 //   height: 40vh;

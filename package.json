@@ -7,8 +7,9 @@
     ]
   },
   "scripts": {
-    "build": "lerna run pages:build && lerna run ssr:build",
-    "start": "lerna run ssr:start --stream",
+    "build": "lerna run app:build && lerna run ssr:build",
+    "start:spa": "lerna run app:serve --stream",
+    "start:ssr": "lerna run ssr:start --stream",
     "ci:app:tags": "node packages/app/ci/tags.js",
     "ci:storybook:tags": "node packages/storybook/ci/tags.js",
     "ci:subnamespace": "node ci/subnamespace.js",

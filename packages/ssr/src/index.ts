@@ -1,24 +1,24 @@
 import 'babel-polyfill';
 
 import {
-  AppContainerServer,
+  getRootReducer,
+  getRootSaga,
+} from 'cra-ts-styled-boilerplate-core';
+import {
   CONFIG_ROUTES,
   PagesReducer,
   PagesSagas,
   PATHS as PAGES_PATHS,
 } from 'cra-ts-styled-boilerplate-pages';
 
-import getMapPathsToPackage from './config/getMapPathsToPackage';
-import getRootReducer from './store/getRootReducer';
-import getRootSaga from './store/getRootSaga';
+import { renderApp } from './main/renderApp';
 import { bootstrap } from './bootstrap';
 
 bootstrap({
-  packageIds: ['cra-ts-styled-boilerplate-pages'],
-  pathToPackageConfig: getMapPathsToPackage({ 'cra-ts-styled-boilerplate-pages': PAGES_PATHS }),
-  renderApp: AppContainerServer,
+  renderApp,
   rootReducer: getRootReducer({ 'cra-ts-styled-boilerplate-pages': PagesReducer }),
   rootSaga: getRootSaga([PagesSagas]),
   routes: [...PAGES_PATHS],
   routesConfig: [...CONFIG_ROUTES],
+  spaPackageId: 'cra-ts-styled-boilerplate-app',
 });

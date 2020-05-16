@@ -30,7 +30,6 @@ module.exports = function (webpackEnv) {
       filename: 'www.js',
       globalObject: 'this',
       path: paths.appBuild,
-      publicPath: paths.publicPath,
     },
 
     externals: [

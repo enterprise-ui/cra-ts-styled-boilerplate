@@ -1,8 +1,11 @@
 import configureStore from './store/configureStore';
+import getRootReducer from './store/getRootReducer';
+import getRootSaga from './store/getRootSaga';
 import Controller from './Controller';
 import {
   IContext,
   IMatchedRouteLoadable,
+  IPackageReducerConfig,
   IPersistedStore,
   IReactFunctionComponent,
   IRoute,
@@ -17,6 +20,7 @@ import withController from './withController';
 export type {
   IContext,
   IMatchedRouteLoadable,
+  IPackageReducerConfig,
   IPersistedStore,
   IRoute,
   IStaticProps,
@@ -27,4 +31,4 @@ export type {
   TRouteComponent,
 };
 
-export { Controller, configureStore, withController };
+export { Controller, configureStore, getRootReducer, getRootSaga, withController };

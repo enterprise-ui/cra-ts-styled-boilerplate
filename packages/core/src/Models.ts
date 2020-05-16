@@ -3,7 +3,7 @@ import React from 'react';
 import { LoadableComponent } from '@loadable/component';
 import { MatchedRoute } from 'react-router-config';
 import { RouteComponentProps, RouteProps } from 'react-router-dom';
-import { Store } from 'redux';
+import { Reducer, Store } from 'redux';
 import { Persistor } from 'redux-persist';
 import { Task } from 'redux-saga';
 
@@ -57,4 +57,8 @@ export interface IRoute extends RouteProps {
 
 export interface IMatchedRouteLoadable extends MatchedRoute<{}> {
   route: IRoute;
+}
+
+export interface IPackageReducerConfig {
+  [packageId: string]: Reducer;
 }
