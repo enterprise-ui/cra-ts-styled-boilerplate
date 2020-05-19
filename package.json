@@ -1,18 +1,21 @@
 {
-    "name": "cra-ts-styled-boilerplate",
-    "private": true,
-    "workspaces": {
-        "packages": [
-          "packages/*"
-        ]
-    },
-    "scripts": {
-      "ci:app:tags": "node packages/app/ci/tags.js",
-      "ci:storybook:tags": "node packages/storybook/ci/tags.js",
-      "ci:subnamespace": "node ci/subnamespace.js",
-      "ci:subdomain": "node ci/subdomain.js"
-    },
-    "devDependencies": {
-      "cross-env": "7.0.2"
-    }
+  "name": "cra-ts-styled-boilerplate",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "build": "lerna run app:build && lerna run ssr:build",
+    "start:spa": "lerna run app:serve --stream",
+    "start:ssr": "lerna run ssr:start --stream",
+    "ci:app:tags": "node packages/app/ci/tags.js",
+    "ci:storybook:tags": "node packages/storybook/ci/tags.js",
+    "ci:subnamespace": "node ci/subnamespace.js",
+    "ci:subdomain": "node ci/subdomain.js"
+  },
+  "devDependencies": {
+    "cross-env": "7.0.2"
   }
+}

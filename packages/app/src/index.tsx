@@ -2,21 +2,28 @@ import './i18n';
 
 import React from 'react';
 
+import { configureStore, getRootReducer, getRootSaga } from 'cra-ts-styled-boilerplate-core';
+import { CONFIG_ROUTES, PagesReducer, PagesSagas } from 'cra-ts-styled-boilerplate-pages';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { renderRoutes } from 'react-router-config';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from 'styled-components';
 
 import { usePrefersDarkMode } from './hooks/usePrefersDarkMode';
-import { App } from './main/App';
-import configureStore from './store/configureStore';
 import { GlobalStyle } from './styles/global';
 import * as serviceWorker from './serviceWorker';
 
+const { persistor, store } = configureStore(
+  getRootReducer({ 'cra-ts-styled-boilerplate-pages': PagesReducer }),
+  { isServer: false },
+  {},
+  getRootSaga([PagesSagas]),
+);
+
 const AppContainer = () => {
   const prefersDarkMode = usePrefersDarkMode();
-  const { store, persistor } = configureStore();
 
   return (
     <React.StrictMode>
@@ -25,7 +32,7 @@ const AppContainer = () => {
           <ThemeProvider theme={{ mode: prefersDarkMode ? 'dark' : 'light' }}>
             <GlobalStyle />
             <Router>
-              <App />
+              {renderRoutes([...CONFIG_ROUTES])}
             </Router>
           </ThemeProvider>
         </PersistGate>
@@ -34,7 +41,11 @@ const AppContainer = () => {
   );
 };
 
-ReactDOM.render(<AppContainer />, document.getElementById('root'));
+if (window.__SSR_DATA__?.isServerInitialRender) {
+  ReactDOM.hydrate(<AppContainer />, document.getElementById('root'));
+} else {
+  ReactDOM.render(<AppContainer />, document.getElementById('root'));
+}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
