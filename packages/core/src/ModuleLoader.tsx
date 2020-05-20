@@ -1,41 +1,51 @@
 import React from 'react';
 
 import { IApplicationConfig } from 'cra-ts-styled-boilerplate-config';
-import { configureStore, IPersistedStore,IRoute } from 'cra-ts-styled-boilerplate-core';
+import { configureStore, IPersistedStore, IRoute } from 'cra-ts-styled-boilerplate-core';
 import { Provider } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
 import { renderRoutes } from 'react-router-config';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 
 interface IOwnProps {
   appConfig: IApplicationConfig;
+  initialState?: any;
 }
 
-const ModuleLoader: React.FunctionComponent<IOwnProps> = ({ appConfig }) => {
+const ModuleLoader: React.FunctionComponent<IOwnProps & RouteComponentProps> = ({
+  appConfig,
+  initialState = {},
+  location,
+}) => {
   const { modules } = appConfig;
+  const router = <Link to="/pages">Pages</Link>;
+  const target = modules[location.pathname];
 
-  const [router, setRouter] = React.useState(<Link to="/pages">Pages</Link>);
-  const [routes, setRoutes] = React.useState<IRoute[]>([]);
-  const [store, setStore] = React.useState<IPersistedStore | null>(null);
+  console.log(location.pathname);
 
-  const history = useHistory();
+  const [ctx, setContext] = React.useState<{ routes: IRoute[]; store: IPersistedStore | null }>({
+    routes: [],
+    store: null,
+  });
+  const { routes, store } = ctx;
 
   React.useEffect(() => {
-    history.listen(async (location) => {
-      console.log(location);
-      const target = modules[location.pathname];
-
+    console.log('didMount');
+    async function load() {
       if (target) {
         const { reducer, routes, saga } = await target.load();
+        const store = configureStore(reducer, { isServer: false }, initialState, saga, false);
 
-        setRoutes(routes);
-        setStore(configureStore(reducer, { isServer: false }, {}, saga, false));
+        setContext({ routes, store });
       } else {
-        setRoutes([]);
-        setStore(null);
+        setContext({ routes: [], store: null });
       }
-    });
-  }, [history, modules]);
+    }
+
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   return store ? (
     <Provider store={store.store}>
@@ -54,4 +64,6 @@ const ModuleLoader: React.FunctionComponent<IOwnProps> = ({ appConfig }) => {
 
 ModuleLoader.displayName = 'ModuleLoader';
 
-export { ModuleLoader };
+const ModuleLoaderRouter = withRouter(ModuleLoader);
+
+export { ModuleLoaderRouter as ModuleLoader };

@@ -8,17 +8,19 @@ import { ServerStyleSheet } from 'styled-components';
 
 export default (
   App: JSX.Element,
-  store: IStore,
   publicPath: string,
+  store?: IStore,
   staticProps?: IStaticProps,
 ) => {
-  const statsFile = path.resolve(path.join(publicPath, 'loadable-stats.json'));
+  const statsFile = publicPath ? path.resolve(path.join(publicPath, 'loadable-stats.json')) : null;
   let extractor = null;
 
-  try {
-    extractor = new ChunkExtractor({ statsFile });
-  } catch (err) {
-    console.log(err);
+  if (statsFile) {
+    try {
+      extractor = new ChunkExtractor({ statsFile });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const sheet = new ServerStyleSheet();
@@ -45,11 +47,11 @@ export default (
             <body>
                 <div id="root">${content}</div>
                 <script>
-                    window.__PRELOADED_STATE__ = ${serialize(store.getState()).replace(
+                    window.__PRELOADED_STATE__ = ${serialize(store?.getState() || {}).replace(
                       /</g,
                       '\\u003c',
                     )}
-                    window.__SSR_DATA__ = ${JSON.stringify(staticProps)}
+                    window.__SSR_DATA__ = ${JSON.stringify(staticProps || {})}
                 </script>
                 ${scriptTags}
             </body>

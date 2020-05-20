@@ -6,8 +6,8 @@ const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 
 const moduleFileExtensions = ['js', 'ts', 'tsx', 'json', 'jsx'];
 const packageDependencies = [
+  'config',
   'core',
-  'pages',
   'uikit',
 ].map((packageId) => resolveApp(`../${packageId}/src`));
 

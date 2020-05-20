@@ -11,6 +11,7 @@ import { StaticRouterContext } from 'react-router';
 import { matchRoutes } from 'react-router-config';
 
 import i18nOptions from './i18n/options';
+import { renderBlank } from './main/renderBlank';
 import i18n from './i18n';
 import { ISSROptions } from './models';
 import renderer from './renderer';
@@ -18,7 +19,7 @@ import renderer from './renderer';
 const getPublicPath = (module: string) => `../../node_modules/${module}/build`;
 
 export function bootstrap(options: ISSROptions) {
-  const { renderApp, rootReducer, rootSaga, routes, routesConfig, spaPackageId } = options;
+  const { appConfig, renderApp, routes, spaPackageId } = options;
   const app = express();
 
   function shouldCompress(req: Request, res: Response) {
@@ -26,23 +27,30 @@ export function bootstrap(options: ISSROptions) {
     return compression.filter(req, res);
   }
 
-  function handleRequest(req: Request, res: Response, next: NextFunction) {
-    const persistStore = configureStore(rootReducer, {isServer: true}, {}, rootSaga);
-    const { store } = persistStore;
+  async function handleRequest(req: Request, res: Response, next: NextFunction) {
+    const { modules } = appConfig;
+    const target = modules[req.path];
 
-    const routes: IMatchedRouteLoadable[] = matchRoutes(routesConfig, req.path);
+    if (target) {
+      const { reducer, routes: configRoutes, saga } = await target.load();
+      const persistStore = configureStore(reducer, { isServer: true }, {}, saga, false);
 
-    const preloadAll: Promise<TRouteComponent>[] = routes.map(({ route: { component } }) => {
-      const loadable = component as LoadableComponent<any>;
+      const routes: IMatchedRouteLoadable[] = matchRoutes(configRoutes, req.path);
 
-      return loadable.load ? loadable.load() : new Promise((resolve) => resolve(loadable));
-    });
+      const preloadAll: Promise<TRouteComponent>[] = routes.map(({ route: { component } }) => {
+        const loadable = component as LoadableComponent<any>;
 
-    const routeProps = { location: { search: req.url }, match: { params: { id: req.params.id } } };
-    const ctx = { props: { ...routeProps, isServer: true }, store };
+        return loadable.load ? loadable.load() : new Promise((resolve) => resolve(loadable));
+      });
 
-    Promise.all(preloadAll)
-      .then((components) => {
+      const routeProps = {
+        location: { search: req.path },
+        match: { params: { id: req.params.id } },
+      };
+
+      const ctx = { props: { ...routeProps, isServer: true }, store: persistStore.store };
+
+      Promise.all(preloadAll).then((components) => {
         const promises = components.map((component) => {
           const loadable = (component as any).default || component;
 
@@ -52,8 +60,8 @@ export function bootstrap(options: ISSROptions) {
         Promise.all(promises)
           .then((staticProps) => {
             const context: StaticRouterContext = {};
-            const AppComponent = renderApp(req.i18n, req.path, persistStore, routesConfig, context);
-            const content = renderer(AppComponent, store, getPublicPath(spaPackageId), {
+            const AppComponent = renderApp(req.i18n, req.path, persistStore, configRoutes, context);
+            const content = renderer(AppComponent, getPublicPath(spaPackageId), persistStore.store, {
               ...staticProps,
               isServerInitialRender: true,
             });
@@ -67,10 +75,13 @@ export function bootstrap(options: ISSROptions) {
           .catch((err) => {
             next(err);
           });
-      })
-      .catch((err) => {
-        next(err);
       });
+    } else {
+        const AppComponent = renderBlank(req.path, {});
+        const content = renderer(AppComponent, getPublicPath(spaPackageId));
+
+        res.send(content);
+    }
   }
 
   app.use(
