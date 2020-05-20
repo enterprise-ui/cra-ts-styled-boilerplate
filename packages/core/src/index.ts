@@ -15,6 +15,7 @@ import {
   TReactComponentType,
   TRouteComponent,
 } from './Models';
+import { ModuleLoader } from './ModuleLoader';
 import withController from './withController';
 
 export type {
@@ -31,4 +32,4 @@ export type {
   TRouteComponent,
 };
 
-export { Controller, configureStore, getRootReducer, getRootSaga, withController };
+export { Controller, configureStore, getRootReducer, getRootSaga, ModuleLoader, withController };

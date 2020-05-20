@@ -3,9 +3,9 @@ import rootSaga from './store/rootSaga';
 import { CONFIG_ROUTES, PATHS, ROUTES } from './routes';
 
 export {
-  CONFIG_ROUTES,
+  CONFIG_ROUTES as routes,
   PATHS,
-  ROUTES,
-  rootSaga as PagesSagas,
-  rootReducer as PagesReducer,
+  ROUTES as ROUTER_CONSTS,
+  rootSaga as saga,
+  rootReducer as reducer,
 };

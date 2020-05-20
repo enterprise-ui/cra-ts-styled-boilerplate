@@ -1,0 +1,15 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "baseUrl": "src",
+        "lib": ["dom", "es6"],
+        "jsx": "react",
+        "declaration": true,
+        "declarationDir": "public/types",
+        "target": "es6",
+        "module": "esnext",
+        "moduleResolution": "node"
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "public"]
+}

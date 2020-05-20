@@ -21,6 +21,7 @@ export default <TState = any>(
   {isServer = false}: IStaticProps,
   state?: TState,
   sagas?: Saga,
+  persisted?: boolean,
   hmrOptions = hmrDefaultOptions,
 ): IPersistedStore => {
   const middlewares: Middleware[] = [thunk];
@@ -36,7 +37,7 @@ export default <TState = any>(
   }
 
   const store: IStore = createStore(rootReducer, state, applyMiddleware(...middlewares));
-  const persistor = persistStore(store);
+  const persistor = persisted ? persistStore(store) : null;
 
   if (sagas) {
     store.sagaTask = sagaMiddleware?.run(sagas);
@@ -45,7 +46,9 @@ export default <TState = any>(
   if (!isServer && module.hot) {
     module.hot.accept(hmrOptions.reducerPath, () => {
       const nextRootReducer = rootReducer;
-      store.replaceReducer(persistReducer(hmrOptions.persistConfig, nextRootReducer));
+      store.replaceReducer(
+        persisted ? persistReducer(hmrOptions.persistConfig, nextRootReducer) : nextRootReducer,
+      );
     });
   }
 

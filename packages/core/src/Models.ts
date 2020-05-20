@@ -24,7 +24,7 @@ export interface IStore extends Store {
 }
 
 export interface IPersistedStore {
-  persistor: Persistor;
+  persistor?: Persistor | null;
   store: IStore;
 }
 
