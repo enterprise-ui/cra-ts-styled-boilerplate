@@ -5,7 +5,7 @@ import React from 'react';
 import AppConfig from 'cra-ts-styled-boilerplate-config';
 import { ModuleLoader } from 'cra-ts-styled-boilerplate-core';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import { usePrefersDarkMode } from './hooks/usePrefersDarkMode';
@@ -20,6 +20,7 @@ const AppContainer = () => {
       <ThemeProvider theme={{ mode: prefersDarkMode ? 'dark' : 'light' }}>
         <GlobalStyle />
         <Router>
+          <Link to="/pages">Pages</Link>
           <ModuleLoader appConfig={AppConfig} />
         </Router>
       </ThemeProvider>

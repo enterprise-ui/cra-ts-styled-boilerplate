@@ -5,7 +5,7 @@ import { configureStore, IPersistedStore, IRoute } from 'cra-ts-styled-boilerpla
 import { Provider } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { renderRoutes } from 'react-router-config';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 
 interface IOwnProps {
@@ -18,21 +18,16 @@ const ModuleLoader: React.FunctionComponent<IOwnProps & RouteComponentProps> = (
   initialState = {},
   location,
 }) => {
-  const { modules } = appConfig;
-  const router = <Link to="/pages">Pages</Link>;
-  const target = modules[location.pathname];
-
-  console.log(location.pathname);
-
   const [ctx, setContext] = React.useState<{ routes: IRoute[]; store: IPersistedStore | null }>({
     routes: [],
     store: null,
   });
-  const { routes, store } = ctx;
 
   React.useEffect(() => {
-    console.log('didMount');
     async function load() {
+      const { modules } = appConfig;
+      const target = modules[location.pathname];
+
       if (target) {
         const { reducer, routes, saga } = await target.load();
         const store = configureStore(reducer, { isServer: false }, initialState, saga, false);
@@ -47,6 +42,8 @@ const ModuleLoader: React.FunctionComponent<IOwnProps & RouteComponentProps> = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
+  const { routes, store } = ctx;
+
   return store ? (
     <Provider store={store.store}>
       {store.persistor ? (
@@ -57,9 +54,7 @@ const ModuleLoader: React.FunctionComponent<IOwnProps & RouteComponentProps> = (
         renderRoutes(routes)
       )}
     </Provider>
-  ) : (
-    router
-  );
+  ) : null;
 };
 
 ModuleLoader.displayName = 'ModuleLoader';
