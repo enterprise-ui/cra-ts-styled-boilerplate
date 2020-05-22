@@ -1,7 +1,7 @@
 import configureStore from './store/configureStore';
 import getRootReducer from './store/getRootReducer';
 import getRootSaga from './store/getRootSaga';
-import Controller from './Controller';
+import InitialPropsDecorator from './InitialPropsDecorator';
 import {
   IContext,
   IMatchedRouteLoadable,
@@ -16,7 +16,7 @@ import {
   TRouteComponent,
 } from './Models';
 import { ModuleLoader } from './ModuleLoader';
-import withController from './withController';
+import withInitialProps from './withInitialProps';
 
 export type {
   IContext,
@@ -32,4 +32,11 @@ export type {
   TRouteComponent,
 };
 
-export { Controller, configureStore, getRootReducer, getRootSaga, ModuleLoader, withController };
+export {
+  InitialPropsDecorator,
+  configureStore,
+  getRootReducer,
+  getRootSaga,
+  ModuleLoader,
+  withInitialProps,
+};

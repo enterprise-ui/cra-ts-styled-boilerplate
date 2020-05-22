@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { withController } from 'cra-ts-styled-boilerplate-core';
+import { withInitialProps } from 'cra-ts-styled-boilerplate-core';
 import { Welcome } from 'cra-ts-styled-boilerplate-uikit';
 import { Trans, useTranslation } from 'react-i18next';
 // import styled, { keyframes } from 'styled-components';
@@ -66,4 +66,4 @@ const Homepage = () => {
 
 Homepage.displayName = 'Demo.Homepage';
 
-export default withController(Homepage);
+export default withInitialProps(Homepage);

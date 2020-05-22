@@ -38,7 +38,7 @@ export default <TState = any>(
 
   const store: IStore = createStore(rootReducer, state, applyMiddleware(...middlewares));
   const persistor = persisted ? persistStore(store) : null;
-
+  // как динамически заинжектить сагу
   if (sagas) {
     store.sagaTask = sagaMiddleware?.run(sagas);
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { withController } from 'cra-ts-styled-boilerplate-core';
+import { withInitialProps } from 'cra-ts-styled-boilerplate-core';
 import { useTranslation } from 'react-i18next';
 
 import { Layout } from '../layout/Layout';
@@ -18,4 +18,4 @@ const NoMatchPage = () => {
 
 NoMatchPage.displayName = 'Demo.NoMatchPage';
 
-export default withController(NoMatchPage);
+export default withInitialProps(NoMatchPage);

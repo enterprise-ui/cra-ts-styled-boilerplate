@@ -30,6 +30,7 @@ const ModuleLoader: React.FunctionComponent<IOwnProps & RouteComponentProps> = (
 
       if (target) {
         const { reducer, routes, saga } = await target.load();
+        // через inject, как инжектить саги?
         const store = configureStore(reducer, { isServer: false }, initialState, saga, false);
 
         setContext({ routes, store });
