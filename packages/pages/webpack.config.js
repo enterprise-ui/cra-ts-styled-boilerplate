@@ -27,6 +27,7 @@ module.exports = function (webpackEnv) {
       libraryTarget: 'umd',
       filename: 'pages.js',
       path: paths.appBuild,
+      publicPath: '/modules/main/',
     },
 
     externals: [

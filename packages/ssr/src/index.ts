@@ -1,12 +1,11 @@
 import 'babel-polyfill';
 
-import AppConfig from 'cra-ts-styled-boilerplate-config';
-
 import { renderApp } from './main/renderApp';
 import { bootstrap } from './bootstrap';
+import MODULE_LOADER_CONFIG from './module.loader.config';
 
 bootstrap({
-  appConfig: AppConfig,
+  appConfig: MODULE_LOADER_CONFIG,
   renderApp,
   routes: ['/', '/pages'],
   routesConfig: [],

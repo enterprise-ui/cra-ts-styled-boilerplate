@@ -5,7 +5,7 @@ import { MatchedRoute } from 'react-router-config';
 import { RouteComponentProps, RouteProps } from 'react-router-dom';
 import { Reducer, Store } from 'redux';
 import { Persistor } from 'redux-persist';
-import { Task } from 'redux-saga';
+import { Saga, Task } from 'redux-saga';
 
 export interface IStaticProps {
   isServer?: boolean;
@@ -61,4 +61,21 @@ export interface IMatchedRouteLoadable extends MatchedRoute<{}> {
 
 export interface IPackageReducerConfig {
   [packageId: string]: Reducer;
+}
+
+interface IModuleConfig {
+    moduleName: string;
+    publicPath: string;
+}
+
+export interface IApplicationConfig {
+  modules: {
+    [path: string]: IModuleConfig;
+  };
+}
+
+export interface IModule {
+  reducer: Reducer;
+  routes: IRoute[];
+  saga: Saga;
 }

@@ -24,7 +24,7 @@ module.exports = {
         webpackConfig.module.rules[1].include,
       ]
       .concat([
-        'config', 'core', 'uikit',
+        'core', 'uikit',
       ].map(p => path.resolve(__dirname, '..', p, 'src')));
 
       // linter

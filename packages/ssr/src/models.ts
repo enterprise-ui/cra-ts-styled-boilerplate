@@ -1,4 +1,4 @@
-import { IApplicationConfig } from 'cra-ts-styled-boilerplate-config';
+import { IApplicationConfig } from 'cra-ts-styled-boilerplate-core';
 import { IPersistedStore,IRoute } from 'cra-ts-styled-boilerplate-core';
 import { StaticRouterContext } from 'react-router';
 

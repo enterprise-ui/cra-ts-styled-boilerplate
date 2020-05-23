@@ -3,6 +3,7 @@ import getRootReducer from './store/getRootReducer';
 import getRootSaga from './store/getRootSaga';
 import InitialPropsDecorator from './InitialPropsDecorator';
 import {
+  IApplicationConfig,
   IContext,
   IMatchedRouteLoadable,
   IPackageReducerConfig,
@@ -15,10 +16,11 @@ import {
   TReactComponentType,
   TRouteComponent,
 } from './Models';
-import { ModuleLoader } from './ModuleLoader';
+import { loadModule, ModuleLoader } from './ModuleLoader';
 import withInitialProps from './withInitialProps';
 
 export type {
+  IApplicationConfig,
   IContext,
   IMatchedRouteLoadable,
   IPackageReducerConfig,
@@ -37,6 +39,7 @@ export {
   configureStore,
   getRootReducer,
   getRootSaga,
+  loadModule,
   ModuleLoader,
   withInitialProps,
 };

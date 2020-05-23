@@ -2,7 +2,6 @@ import './i18n';
 
 import React from 'react';
 
-import AppConfig from 'cra-ts-styled-boilerplate-config';
 import { ModuleLoader } from 'cra-ts-styled-boilerplate-core';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
@@ -10,6 +9,7 @@ import { ThemeProvider } from 'styled-components';
 
 import { usePrefersDarkMode } from './hooks/usePrefersDarkMode';
 import { GlobalStyle } from './styles/global';
+import MODULE_LOADER_CONFIG from './module.loader.config';
 import * as serviceWorker from './serviceWorker';
 
 const AppContainer = () => {
@@ -21,7 +21,10 @@ const AppContainer = () => {
         <GlobalStyle />
         <Router>
           <Link to="/pages">Pages</Link>
-          <ModuleLoader appConfig={AppConfig} />
+          <ModuleLoader
+            appConfig={MODULE_LOADER_CONFIG}
+            initialState={window.__PRELOADED_STATE__}
+          />
         </Router>
       </ThemeProvider>
     </React.StrictMode>

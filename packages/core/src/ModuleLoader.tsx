@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { IApplicationConfig } from 'cra-ts-styled-boilerplate-config';
 import { configureStore, IPersistedStore, IRoute } from 'cra-ts-styled-boilerplate-core';
 import { Provider } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
@@ -8,10 +7,14 @@ import { renderRoutes } from 'react-router-config';
 import { withRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 
+import { IApplicationConfig, IModule } from './Models';
+
 interface IOwnProps {
   appConfig: IApplicationConfig;
   initialState?: any;
 }
+
+const loadModule = (path: string): Promise<IModule> => import(/* webpackIgnore: true */path);
 
 const ModuleLoader: React.FunctionComponent<IOwnProps & RouteComponentProps> = ({
   appConfig,
@@ -29,7 +32,8 @@ const ModuleLoader: React.FunctionComponent<IOwnProps & RouteComponentProps> = (
       const target = modules[location.pathname];
 
       if (target) {
-        const { reducer, routes, saga } = await target.load();
+        const { moduleName, publicPath } = target;
+        const { reducer, routes, saga } = await loadModule(`${publicPath}/${moduleName}`);
         // через inject, как инжектить саги?
         const store = configureStore(reducer, { isServer: false }, initialState, saga, false);
 
@@ -62,4 +66,4 @@ ModuleLoader.displayName = 'ModuleLoader';
 
 const ModuleLoaderRouter = withRouter(ModuleLoader);
 
-export { ModuleLoaderRouter as ModuleLoader };
+export { loadModule, ModuleLoaderRouter as ModuleLoader };

@@ -3,6 +3,7 @@ import compression from 'compression';
 import {
   configureStore,
   IMatchedRouteLoadable,
+  loadModule,
   TRouteComponent,
 } from 'cra-ts-styled-boilerplate-core';
 import express, { NextFunction, Request, Response } from 'express';
@@ -32,7 +33,12 @@ export function bootstrap(options: ISSROptions) {
     const target = modules[req.path];
 
     if (target) {
-      const { reducer, routes: configRoutes, saga } = await target.load();
+      const { moduleName, publicPath } = target;
+
+      const { reducer, routes: configRoutes, saga } = await loadModule(
+        `${publicPath}/${moduleName}`,
+      );
+
       const persistStore = configureStore(reducer, { isServer: true }, {}, saga, false);
 
       const routes: IMatchedRouteLoadable[] = matchRoutes(configRoutes, req.path);
